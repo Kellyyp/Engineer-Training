@@ -1,28 +1,34 @@
 # Engineer Training Hub v5
 
-## Version 5.0.0 — Part 1 React Foundation
+## Version 5.0.1 — Part 2 Equipment Detail Viewer
 
-This is the first React/Vite foundation for the new version of Engineer Training Hub.
+This release builds on the React/Vite foundation.
+
+## New
+
+- Equipment Detail Viewer
+- Clickable chiller plant equipment
+- Component list
+- Component explanation panel
+- BAS points
+- Specs panel
+- Training tabs:
+  - AI View
+  - Components
+  - Flow
+  - Maintenance
+  - BAS Points
+  - Troubleshooting
 
 ## Upload to GitHub
 
-Upload the extracted contents of this ZIP into the new Version 5 repository.
+Replace the existing files with the extracted contents of this ZIP.
 
 ## Vercel
 
-Use default Vercel settings. Vercel should detect Vite automatically.
+Use default Vercel settings.
 
 If needed:
 - Framework: Vite
 - Build Command: npm run build
 - Output Directory: dist
-
-## Included
-
-- React
-- Vite
-- Sidebar
-- Dashboard
-- Building Systems cards
-- Chiller Plant overview
-- Professional BAS-inspired theme

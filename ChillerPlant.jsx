@@ -1,6 +1,6 @@
 import { chillerPlantEquipment } from '../data/systems'
 
-export default function ChillerPlant({ openView }) {
+export default function ChillerPlant({ openEquipment, openView }) {
   return (
     <div>
       <section className="plantHero">
@@ -21,24 +21,24 @@ export default function ChillerPlant({ openView }) {
           <div className="plantPipe vertical" />
           <div className="plantPipe horizontal" />
 
-          <button className="plantNode tower">Cooling Towers</button>
-          <button className="plantNode cwp">CW Pumps</button>
-          <button className="plantNode chiller">Chillers</button>
-          <button className="plantNode chwp">CHW Pumps</button>
-          <button className="plantNode exp">Expansion Tank</button>
-          <button className="plantNode hx">Plate HX</button>
+          <button className="plantNode tower" onClick={() => openEquipment('cooling-towers')}>Cooling Towers</button>
+          <button className="plantNode cwp" onClick={() => openEquipment('cw-pumps')}>CW Pumps</button>
+          <button className="plantNode chiller" onClick={() => openEquipment('chillers')}>Chillers</button>
+          <button className="plantNode chwp" onClick={() => openEquipment('chw-pumps')}>CHW Pumps</button>
+          <button className="plantNode exp" onClick={() => openEquipment('expansion-tank')}>Expansion Tank</button>
+          <button className="plantNode hx" onClick={() => openEquipment('plate-hx')}>Plate HX</button>
           <button className="plantNode building">Building Load</button>
         </section>
 
         <aside className="plantSide">
           <p className="eyebrow">Equipment Groups</p>
           <h2>Clickable plant assets</h2>
-          <p>Part 1 establishes the React foundation. Next releases will open each asset into a detailed AI-style equipment viewer.</p>
+          <p>Select any equipment group to open the detailed training viewer with components, BAS points, specs, and troubleshooting guidance.</p>
 
           <div className="equipmentList">
             {chillerPlantEquipment.map((item) => (
-              <button key={item.id} className="equipmentItem">
-                <strong>{item.name}</strong>
+              <button key={item.id} className="equipmentItem" onClick={() => openEquipment(item.id)}>
+                <strong>{item.icon} {item.name}</strong>
                 <span>{item.type}</span>
               </button>
             ))}
