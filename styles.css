@@ -1,7 +1,8 @@
 :root{
   --bg:#08111f;--panel:rgba(18,35,58,.78);--line:rgba(108,181,255,.22);
   --blue:#28b6ff;--blue-soft:rgba(40,182,255,.15);--text:#fff;--muted:#a7b6c8;
-  --green:#36d399;--radius:22px;--shadow:0 24px 70px rgba(0,0,0,.35);
+  --green:#36d399;--orange:#f59e0b;--red:#ef4444;--radius:22px;
+  --shadow:0 24px 70px rgba(0,0,0,.35);
   font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif
 }
 *{box-sizing:border-box}
@@ -26,7 +27,7 @@ button{font:inherit}
 .eyebrow{color:var(--blue);text-transform:uppercase;letter-spacing:.12em;font-size:12px;font-weight:800;margin:0 0 6px}
 h1,h2,h3,p{margin-top:0}h1{margin-bottom:0;font-size:clamp(24px,3vw,38px)}
 .hero{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:18px;align-items:stretch;margin-bottom:20px}
-.hero-content,.plant-status-card,.system-card,.module-card,.placeholder-view{border:1px solid var(--line);border-radius:var(--radius);background:linear-gradient(180deg,rgba(18,35,58,.86),rgba(8,17,31,.88));box-shadow:var(--shadow);backdrop-filter:blur(18px)}
+.hero-content,.plant-status-card,.system-card,.module-card,.placeholder-view,.plant-map,.equipment-panel,.info-panel{border:1px solid var(--line);border-radius:var(--radius);background:linear-gradient(180deg,rgba(18,35,58,.86),rgba(8,17,31,.88));box-shadow:var(--shadow);backdrop-filter:blur(18px)}
 .hero-content{padding:clamp(22px,4vw,42px);min-height:270px}.hero h2{font-size:clamp(34px,6vw,72px);line-height:.95;letter-spacing:-.05em;margin-bottom:18px}
 .hero p{color:var(--muted);max-width:740px;font-size:17px;line-height:1.65}.hero-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
 .primary-btn{background:linear-gradient(135deg,var(--blue),#1665ff);border-color:rgba(255,255,255,.18);font-weight:850}.secondary-btn,.card-btn{background:rgba(8,17,31,.75)}
@@ -36,4 +37,24 @@ h1,h2,h3,p{margin-top:0}h1{margin-bottom:0;font-size:clamp(24px,3vw,38px)}
 .system-card:before,.module-card:before{content:"";position:absolute;inset:0 0 auto;height:4px;background:linear-gradient(90deg,var(--blue),transparent)}
 .card-icon{font-size:34px;margin-bottom:14px}.system-card h3,.module-card h3{font-size:22px;margin-bottom:8px}.system-card p,.module-card p{color:var(--muted);line-height:1.5}.card-meta{color:var(--blue);font-weight:800;font-size:12px;letter-spacing:.08em;text-transform:uppercase}
 .placeholder-view{padding:28px;min-height:280px}.placeholder-view p{color:var(--muted);line-height:1.6}
-@media(max-width:960px){.app-shell{grid-template-columns:1fr}.sidebar{position:fixed;inset:0 auto 0 0;width:min(82vw,310px);transform:translateX(-105%);transition:.22s ease;z-index:20}.sidebar.open{transform:translateX(0)}.menu-btn{display:grid;place-items:center}.workspace{padding:16px}.hero{grid-template-columns:1fr}.grid{grid-template-columns:1fr}}
+
+.plant-layout{display:grid;grid-template-columns:1.2fr .8fr;gap:16px}
+.plant-map{padding:20px;min-height:620px;position:relative;overflow:hidden}
+.plant-map-header{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:18px}
+.plant-map-header p{color:var(--muted);margin:0}
+.plant-stage{position:relative;min-height:500px;border:1px solid rgba(108,181,255,.16);border-radius:20px;background:radial-gradient(circle at 50% 40%,rgba(40,182,255,.12),transparent 42%),rgba(4,10,20,.58);overflow:hidden}
+.pipe{position:absolute;background:linear-gradient(90deg,transparent,var(--blue),transparent);opacity:.72;box-shadow:0 0 18px rgba(40,182,255,.35)}
+.pipe.vertical{width:8px;height:78%;left:50%;top:10%;transform:translateX(-50%)}
+.pipe.horizontal{height:8px;width:70%;left:15%;top:50%;transform:translateY(-50%)}
+.flow-active .pipe{animation:flowPulse 1.2s infinite alternate}
+@keyframes flowPulse{from{opacity:.35;filter:saturate(1)}to{opacity:1;filter:saturate(1.8)}}
+.equip-node{position:absolute;width:170px;min-height:86px;border:1px solid var(--line);border-radius:18px;background:linear-gradient(180deg,#14304f,#0b1d31);color:var(--text);padding:13px;text-align:left;cursor:pointer;transition:.2s ease;box-shadow:0 18px 40px rgba(0,0,0,.28)}
+.equip-node:hover,.equip-node.active{border-color:var(--blue);transform:translateY(-3px);box-shadow:0 0 34px rgba(40,182,255,.24)}
+.equip-node small{display:block;color:var(--blue);font-weight:900;text-transform:uppercase;letter-spacing:.08em;font-size:10px;margin-bottom:5px}
+.equip-node strong{display:block;font-size:16px}.equip-node span{display:block;color:var(--muted);font-size:12px;margin-top:5px}
+.node-tower{left:50%;top:6%;transform:translateX(-50%)}.node-cwp{right:8%;top:25%}.node-chiller{left:50%;top:42%;transform:translate(-50%,-50%)}.node-chwp{left:8%;top:53%}.node-exp{left:8%;top:74%}.node-hx{right:8%;top:72%}.node-building{left:50%;bottom:5%;transform:translateX(-50%)}
+.info-panel{padding:20px}.info-panel p{color:var(--muted);line-height:1.55}.equipment-list{display:grid;gap:10px;margin-top:16px}
+.equipment-panel{padding:14px;border-radius:16px;cursor:pointer;transition:.2s ease}.equipment-panel:hover,.equipment-panel.active{border-color:var(--blue);background:var(--blue-soft)}
+.equipment-panel strong{display:block}.equipment-panel span{display:block;color:var(--muted);font-size:13px;margin-top:4px}
+.metric-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:16px 0}.metric{border:1px solid var(--line);border-radius:14px;padding:12px;background:rgba(8,17,31,.6)}.metric small{display:block;color:var(--muted);text-transform:uppercase;font-size:10px;font-weight:900}.metric b{font-size:20px;color:var(--blue)}
+@media(max-width:960px){.app-shell{grid-template-columns:1fr}.sidebar{position:fixed;inset:0 auto 0 0;width:min(82vw,310px);transform:translateX(-105%);transition:.22s ease;z-index:20}.sidebar.open{transform:translateX(0)}.menu-btn{display:grid;place-items:center}.workspace{padding:16px}.hero,.plant-layout{grid-template-columns:1fr}.grid{grid-template-columns:1fr}.plant-map{min-height:auto}.plant-stage{min-height:720px}.equip-node{width:160px}.node-cwp{right:4%}.node-chwp{left:4%}.node-exp{left:4%}.node-hx{right:4%}.metric-row{grid-template-columns:1fr}}

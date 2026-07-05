@@ -1,12 +1,15 @@
 # Engineer Training Hub v4
 
-## Release 4.0.0 — Sprint 1 Task 1
+## Release 4.0.1 — Sprint 2 Plant Explorer
 
-Files included:
+Replace these files:
 - index.html
-- css/styles.css
-- js/app.js
+- styles.css
+- app.js
 
-Upload these extracted files to the new Engineer-Training GitHub repo.
-
-If your Vercel setup uses a public folder, put these inside public/.
+What changed:
+- Added clickable Building Systems
+- Added interactive Chiller Plant overview
+- Added Start Plant / Stop Plant flow mode
+- Added selectable equipment nodes
+- Added BAS point descriptions for each major chiller plant asset
