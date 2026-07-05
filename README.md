@@ -1,15 +1,17 @@
 # Engineer Training Hub v4
 
-## Release 4.0.1 — Sprint 2 Plant Explorer
+## Release 4.0.2 — Sprint 3 Equipment Viewer
 
-Replace these files:
+Replace:
 - index.html
 - styles.css
 - app.js
 
-What changed:
-- Added clickable Building Systems
-- Added interactive Chiller Plant overview
-- Added Start Plant / Stop Plant flow mode
-- Added selectable equipment nodes
-- Added BAS point descriptions for each major chiller plant asset
+New:
+- Detailed Equipment Viewer
+- Component list
+- Hotspots
+- Equipment specs
+- BAS points
+- How-it-works explanations
+- Equipment Library now opens details
