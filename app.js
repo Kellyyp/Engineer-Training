@@ -2,6 +2,66 @@ let selectedEquipment = "chiller";
 let selectedComponent = 0;
 let plantRunning = false;
 let viewerMode = "AI View";
+let operatingMode = "normal";
+
+
+const operatingModes = {
+  normal: {
+    label: "Normal Cooling",
+    status: "Running",
+    chws: "44°F",
+    load: "46%",
+    towerFan: "45%",
+    pumpSpeed: "52%",
+    alarm: "No active alarms",
+    summary: "One chiller is running with normal chilled water demand. Pumps are modulating to maintain differential pressure.",
+    operator: "Verify CHWS is stable, tower approach is normal, and pump speeds are not hunting."
+  },
+  peak: {
+    label: "Peak Summer Cooling",
+    status: "High Load",
+    chws: "45°F",
+    load: "84%",
+    towerFan: "88%",
+    pumpSpeed: "76%",
+    alarm: "High building load",
+    summary: "The building load is high. Cooling towers and pumps are ramped up and a second chiller may be needed soon.",
+    operator: "Watch chiller amps, condenser water temperature, tower approach, and whether CHWS begins to drift upward."
+  },
+  loadshed: {
+    label: "Load Shed",
+    status: "Demand Response",
+    chws: "47°F",
+    load: "58%",
+    towerFan: "38%",
+    pumpSpeed: "44%",
+    alarm: "Demand limit active",
+    summary: "Plant output is intentionally reduced to limit demand. Setpoints may be relaxed and staging may be restricted.",
+    operator: "Confirm tenant comfort, avoid unnecessary chiller staging, and monitor zones that are most sensitive to temperature rise."
+  },
+  fault: {
+    label: "Fault Investigation",
+    status: "Alarm",
+    chws: "51°F",
+    load: "69%",
+    towerFan: "92%",
+    pumpSpeed: "81%",
+    alarm: "CHWS above setpoint",
+    summary: "Chilled water supply is drifting high even though pumps and towers are working harder. This requires troubleshooting.",
+    operator: "Check chiller status, condenser water temperature, tower operation, flow proof, valve positions, and sensor accuracy."
+  },
+  standby: {
+    label: "Standby",
+    status: "Off",
+    chws: "--",
+    load: "0%",
+    towerFan: "0%",
+    pumpSpeed: "0%",
+    alarm: "Plant off",
+    summary: "The plant is off. Equipment is available but not currently running.",
+    operator: "Confirm safeties are normal, enable commands are ready, and no lockouts are active before starting."
+  }
+};
 
 const equipment = {
   tower: {
@@ -138,6 +198,8 @@ function renderEquipmentLibrary(){return `<div class="section-title"><div><p cla
 
 function renderChillerPlant(){
   const e = equipment[selectedEquipment];
+  const mode = operatingModes[operatingMode];
+
   return `
   <div class="section-title">
     <div>
@@ -147,15 +209,42 @@ function renderChillerPlant(){
     </div>
     <button class="primary-btn" id="startPlantBtn">${plantRunning ? "Stop Plant" : "Start Plant"}</button>
   </div>
-  <div class="metric-row">
-    <div class="metric"><small>CHWS</small><b>${plantRunning ? "44°F" : "--"}</b></div>
-    <div class="metric"><small>Plant Load</small><b>${plantRunning ? "46%" : "Standby"}</b></div>
-    <div class="metric"><small>Status</small><b>${plantRunning ? "Running" : "Off"}</b></div>
+
+  <div class="mode-selector">
+    ${Object.entries(operatingModes).map(([key,m])=>`
+      <button class="mode-card ${operatingMode===key?"active":""}" data-operating-mode="${key}">
+        <small>${m.status}</small>
+        <strong>${m.label}</strong>
+      </button>`).join("")}
   </div>
+
+  <div class="metric-row">
+    <div class="metric"><small>CHWS</small><b>${plantRunning ? mode.chws : "--"}</b></div>
+    <div class="metric"><small>Plant Load</small><b>${plantRunning ? mode.load : "Standby"}</b></div>
+    <div class="metric"><small>Status</small><b>${plantRunning ? mode.status : "Off"}</b></div>
+    <div class="metric"><small>Tower Fan</small><b>${plantRunning ? mode.towerFan : "0%"}</b></div>
+    <div class="metric"><small>Pump Speed</small><b>${plantRunning ? mode.pumpSpeed : "0%"}</b></div>
+    <div class="metric alarm-metric"><small>Alarm Banner</small><b>${plantRunning ? mode.alarm : "Plant off"}</b></div>
+  </div>
+
+  <div class="operator-banner ${operatingMode==="fault" ? "fault" : operatingMode==="peak" ? "warn" : ""}">
+    <div>
+      <p class="eyebrow">Operator Brief</p>
+      <strong>${mode.summary}</strong>
+      <span>${mode.operator}</span>
+    </div>
+  </div>
+
   <div class="plant-layout">
     <section class="plant-map">
-      <div class="plant-map-header"><div><p class="eyebrow">Interactive Plant</p><h3>Central Chiller Plant</h3></div><p>${plantRunning ? "Flow mode active" : "Tap Start Plant to animate flow"}</p></div>
-      <div class="plant-stage ${plantRunning ? "flow-active" : ""}">
+      <div class="plant-map-header">
+        <div>
+          <p class="eyebrow">Interactive Plant</p>
+          <h3>Central Chiller Plant</h3>
+        </div>
+        <p>${plantRunning ? `${mode.label} active` : "Tap Start Plant to animate flow"}</p>
+      </div>
+      <div class="plant-stage ${plantRunning ? "flow-active" : ""} mode-${operatingMode}">
         <div class="pipe vertical"></div><div class="pipe horizontal"></div>
         ${node("tower","node-tower","Cooling Towers","Heat rejection")}
         ${node("cwp","node-cwp","CW Pumps","Condenser loop")}
@@ -166,12 +255,81 @@ function renderChillerPlant(){
         ${node("building","node-building","Building Load","Airside coils")}
       </div>
     </section>
+
     <aside class="info-panel">
-      <p class="eyebrow">Selected Equipment</p><h2>${e.label}</h2><p><strong>${e.type}</strong></p><p>${e.description}</p><p><strong>BAS points:</strong> ${e.points}</p>
-      <div class="equipment-list">${Object.entries(equipment).map(([key,item])=>`<div class="equipment-panel ${selectedEquipment===key?"active":""}" data-equipment="${key}"><strong>${item.label}</strong><span>${item.type}</span></div>`).join("")}</div>
+      <p class="eyebrow">Selected Equipment</p>
+      <h2>${e.label}</h2>
+      <p><strong>${e.type}</strong></p>
+      <p>${e.description}</p>
+      <p><strong>BAS points:</strong> ${e.points}</p>
+
+      <div class="scenario-box">
+        <p class="eyebrow">Mode Impact</p>
+        <p>${modeImpact(selectedEquipment, operatingMode)}</p>
+      </div>
+
+      <div class="equipment-list">
+        ${Object.entries(equipment).map(([key,item])=>`
+          <div class="equipment-panel ${selectedEquipment===key?"active":""}" data-equipment="${key}">
+            <strong>${item.label}</strong>
+            <span>${item.type}</span>
+          </div>`).join("")}
+      </div>
+
       <button class="primary-btn" style="margin-top:16px;width:100%" data-view="equipmentDetail">Open Detailed Equipment Page →</button>
     </aside>
   </div>`;
+}
+
+function modeImpact(eq, mode){
+  const map = {
+    normal: {
+      chiller:"Chiller should hold CHWS close to setpoint with stable loading.",
+      chwp:"Pump VFD should modulate smoothly to maintain building differential pressure.",
+      cwp:"Condenser water pump should maintain proper flow through the condenser.",
+      tower:"Tower fan should modulate to maintain condenser water supply temperature.",
+      exp:"Expansion tank should keep pressure stable as water temperature changes.",
+      hx:"Heat exchanger remains available with normal approach temperature.",
+      building:"Building valves modulate normally as zones call for cooling."
+    },
+    peak: {
+      chiller:"Chiller loading rises and additional staging may be required if CHWS drifts.",
+      chwp:"Pump speed increases as more control valves open throughout the building.",
+      cwp:"Condenser pump demand increases to support higher heat rejection.",
+      tower:"Tower fan speed rises to keep condenser water temperature under control.",
+      exp:"System pressure should remain stable even as temperatures and flow change.",
+      hx:"Heat exchanger approach should be watched closely under higher flow.",
+      building:"More zones call for cooling and valve positions trend open."
+    },
+    loadshed: {
+      chiller:"Chiller output may be limited and chilled water setpoint may be reset upward.",
+      chwp:"Pump speed may be reduced if the plant is limiting demand.",
+      cwp:"Condenser loop should remain stable while demand is reduced.",
+      tower:"Tower fan operation may be optimized to reduce total plant demand.",
+      exp:"Pressure should remain normal during reduced load operation.",
+      hx:"Heat transfer may be reduced depending on plant strategy.",
+      building:"Comfort-sensitive areas should be monitored during relaxed cooling."
+    },
+    fault: {
+      chiller:"Check whether the chiller is enabled, loaded, safeties are clear, and flow is proven.",
+      chwp:"Confirm pump status, DP, VFD speed, isolation valves, and flow indication.",
+      cwp:"Verify condenser water flow, pump proof, and condenser water temperatures.",
+      tower:"Check tower fans, basin level, spray flow, strainers, and approach temperature.",
+      exp:"Look for pressure problems that may cause flow or air issues.",
+      hx:"Check for fouling, valve issues, or high differential pressure.",
+      building:"Look for simultaneous valve hunting, high return temperature, or sensor problems."
+    },
+    standby: {
+      chiller:"Chiller is available but not running.",
+      chwp:"Pumps are off unless lead/lag or freeze protection is active.",
+      cwp:"Condenser water pumps are off.",
+      tower:"Tower fans are off.",
+      exp:"Tank remains connected to maintain static pressure.",
+      hx:"Heat exchanger is idle.",
+      building:"No active cooling demand is being served by the plant."
+    }
+  };
+  return (map[mode] && map[mode][eq]) || "Review equipment status and related BAS points for this operating mode.";
 }
 
 function renderEquipmentDetail(){
@@ -218,6 +376,7 @@ function equipmentSvg(key){
 function placeholder(title,text){return `<section class="placeholder-view"><p class="eyebrow">Module placeholder</p><h2>${title}</h2><p>${text}</p><button class="primary-btn" data-view="home">Back Home</button></section>`}
 function setView(name){const view=views[name]||views.home;document.getElementById("pageTitle").textContent=view.title;document.getElementById("viewRoot").innerHTML=view.render();document.querySelectorAll(".nav-item").forEach(btn=>btn.classList.toggle("active",btn.dataset.view===name));document.getElementById("sidebar").classList.remove("open");window.scrollTo({top:0,behavior:"smooth"})}
 document.addEventListener("click",e=>{
+  const op=e.target.closest("[data-operating-mode]"); if(op){operatingMode=op.dataset.operatingMode; plantRunning = operatingMode !== "standby"; setView("chillerPlant"); return;}
   const mode=e.target.closest("[data-mode]"); if(mode){viewerMode=mode.dataset.mode;setView("equipmentDetail");return;}
   const comp=e.target.closest("[data-component]"); if(comp){selectedComponent=Number(comp.dataset.component);setView("equipmentDetail");return;}
   const open=e.target.closest("[data-open-equipment]"); if(open){selectedEquipment=open.dataset.openEquipment;selectedComponent=0;setView("equipmentDetail");return;}
