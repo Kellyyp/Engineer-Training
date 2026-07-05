@@ -1,64 +1,12 @@
 <!doctype html>
 <html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Engineer Training Hub v4</title>
-  <link rel="stylesheet" href="styles.css" />
-</head>
-<body>
-  <div class="app-shell">
-    <aside class="sidebar" id="sidebar">
-      <div class="brand">
-        <div class="brand-mark">ETH</div>
-        <div>
-          <strong>Engineer Training Hub</strong>
-          <span>Building Systems Training</span>
-        </div>
-      </div>
-
-      <nav class="side-nav">
-        <button class="nav-item active" data-view="home">🏠 Home</button>
-        <button class="nav-item" data-view="systems">🏢 Building Systems</button>
-        <button class="nav-item" data-view="chillerPlant">❄ Chiller Plant</button>
-        <button class="nav-item" data-view="bas">🖥 BAS Simulator</button>
-        <button class="nav-item" data-view="scada">📈 SCADA Training</button>
-        <button class="nav-item" data-view="study">📚 Study Center</button>
-        <button class="nav-item" data-view="equipment">📖 Equipment Library</button>
-        <button class="nav-item" data-view="settings">⚙ Settings</button>
-      </nav>
-    </aside>
-
-    <main class="workspace">
-      <header class="topbar">
-        <button class="menu-btn" id="menuBtn">☰</button>
-        <div>
-          <p class="eyebrow">Release 4.0.3 · Sprint 4</p>
-          <h1 id="pageTitle">Professional Building Engineer Training</h1>
-        </div>
-      </header>
-
-      <section class="hero" id="heroBlock">
-        <div class="hero-content">
-          <p class="eyebrow">Engineer Training Hub v4</p>
-          <h2>Learn the building as a complete system.</h2>
-          <p>Explore mechanical plants, BAS operation, SCADA workflows, and equipment components the way building engineers see them in the field.</p>
-          <div class="hero-actions">
-            <button class="primary-btn" data-view="systems">Enter Building Systems</button>
-            <button class="secondary-btn" data-view="chillerPlant">Open Chiller Plant</button>
-          </div>
-        </div>
-        <div class="plant-status-card">
-          <span class="status-dot"></span>
-          <strong>Operating Modes Added</strong>
-          <p>Run the chiller plant in realistic operating modes.</p>
-        </div>
-      </section>
-
-      <section id="viewRoot" class="view-root"></section>
-    </main>
-  </div>
-
-  <script src="app.js"></script>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Engineer Training Hub v5</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
 </html>

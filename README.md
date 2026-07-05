@@ -1,19 +1,28 @@
-# Engineer Training Hub v4
+# Engineer Training Hub v5
 
-## Release 4.0.3 — Sprint 4 Operating Modes
+## Version 5.0.0 — Part 1 React Foundation
 
-Replace:
-- index.html
-- styles.css
-- app.js
+This is the first React/Vite foundation for the new version of Engineer Training Hub.
 
-New:
-- Chiller Plant operating modes
-- Normal Cooling
-- Peak Summer Cooling
-- Load Shed
-- Fault Investigation
-- Standby
-- Operator brief panel
-- Alarm banner metric
-- Equipment-specific mode impact explanations
+## Upload to GitHub
+
+Upload the extracted contents of this ZIP into the new Version 5 repository.
+
+## Vercel
+
+Use default Vercel settings. Vercel should detect Vite automatically.
+
+If needed:
+- Framework: Vite
+- Build Command: npm run build
+- Output Directory: dist
+
+## Included
+
+- React
+- Vite
+- Sidebar
+- Dashboard
+- Building Systems cards
+- Chiller Plant overview
+- Professional BAS-inspired theme
